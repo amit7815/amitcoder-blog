@@ -1,6 +1,98 @@
 {% extends 'base.html' %}
-
+{% load extras %}
 {% block titlt %} blogPost{% endblock titlt %}
 
-{% block body %}blogPost
+{% block body %}
+<div style="background-color:white;" class="container my-3">
+  <div class="blog-post">
+    <h2 class="blog-post-title"><b>{{post.title}}</b></h2>
+    <p class="blog-post-meta">{{post.timestamp}} by <a href="/about">{{post.author}}</a></p>
+
+    <p>{{post.content}}</p>
+
+
+  </div>
+</div>
+
+<div class="container">
+  <h2>Comments({{comments.count}})</h2>
+  <!-- <form action="/blog/postcomment/" method="post">
+    {% csrf_token %}
+    <input type="text" name="comment" id="" placeholder="enter comment here">
+    <input type="hidden" name="postSno" value={{post.sno}}>
+    <input type="submit" value="Submit">
+  </form> -->
+
+  <form action="/blog/postcomment/" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <!-- <label for="exampleInputEmail1">Post Comment</label> -->
+      <input type="text" class="form-control" name="comment" id="" placeholder="enter comment here" required>
+    </div>
+
+
+    <input type="hidden" name="postSno" value={{post.sno}}>
+    <input type="hidden" name="parentSno" value="">
+    {% if user.is_authenticated %}
+    <button type="submit" class="btn btn-primary">Comment</button>
+    {% else %}
+    <button type="button" class="btn btn-outline-danger my-2 my-sm-0 ml-2" data-toggle="modal"
+      data-target="#LoginModal">
+      Submit
+    </button>
+    {% endif %}
+  </form>
+
+  {% for comment in comments %}
+  <div style="background-color:white" class="row my-3">
+    <div class="col-md-1 my-1">
+      <img src="/static/img/user.jpeg" class="rounded mx-auto d-block w-100 p-1 border border-dark" alt="">
+    </div>
+    <div class="col-md-11">
+      <b>{{comment.user.username}}</b> <span class="badge badge-secondary"> {{comment.timestamp|timesince}} ago</span>
+      {% comment %} x days ago in django{% endcomment %}
+      <div>{{comment.comment}}</div>
+      <div class="reply">
+        {% comment %} # collapse from bootstrap {% endcomment %}
+        {% comment %} btn-sm bootstrap class makes button small {% endcomment %}
+        <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
+          data-target="#replyBox{{comment.sno}}" aria-expanded="false" aria-controls="collapseExample">
+          Reply
+        </button>
+        <div class="collapse" id="replyBox{{comment.sno}}">
+          <div class="card card-body my-2">
+
+            <form action="/blog/postcomment/" method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <!-- <label for="exampleInputEmail1">Post Comment</label> -->
+                <input type="text" class="form-control" name="comment" id="" placeholder="reply here">
+                <input type="hidden" name="parentSno" value="{{comment.sno}}">
+              </div>
+
+
+              <input type="hidden" name="postSno" value={{post.sno}}>
+              <button type="submit" class="btn btn-primary btn-sm">submit</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+      <div class="reply  my-2">
+          {% for reply in replyDict|get_val:comment.sno  %}
+          <div  class="row">
+          <div class="col-md-1">
+            <img src="/static/img/user.jpeg" class="rounded mx-auto d-block border border-dark w-100 p-1" alt="">
+          </div>
+            <div class="col-md-11">
+            
+            <b>{{reply.comment}}</b><span class="badge badge-secondary mx-2"> {{reply.timestamp|timesince}} ago</span><br>
+            </div>
+            </div>
+          {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
 {% endblock body %}

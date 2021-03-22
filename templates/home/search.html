@@ -1,13 +1,19 @@
 {% extends 'base.html' %}
 
-{% block title %} blogHome{% endblock title %}
+{% block title %} Search Results{% endblock title %}
 {% block blogactive %}active{% endblock blogactive %}
 {% block body %}
 <div class="container my-4">
-    <h1><b>Coding Articles By AmitCoder</b></h1>
+    <h2><b>Search Results</b></h2>
     <hr>
+    {% if allPosts|length < 1 %}
+        <p><b>No search results found</b></p>
+        <p>Your Search -<b>{{query|truncatechars:1003}}</b> did not match any documents </p>
+        suggestion:<br>
+        <ul style="margin-left:1.3em;margin-bottom:2em"><li>Make sure that all words are spelled correctly.</li><li>Try different keywords.</li><li>Try more general keywords.</li><li>Try fewer keywords.</li></ul>
+    {% endif %}
     {% for post in allPosts %}
-    <div style="background-color:white;" class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative my-4 cbox">
+    <div style="background-color:white;" class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative my-4">
         <div class="col p-4 d-flex flex-column position-static">
           <strong class="d-inline-block mb-2 text-primary">Article by {{post.author}}</strong>
           <h3 class="mb-0">{{post.title}}</h3>

@@ -4,7 +4,10 @@
 {% block contactactive %}active{% endblock contactactive %}
 {% block body %}
 <div class="container my-2">
-<h2>Contact AmitCoders</h2>
+<div class="row">
+<div class="col-md-6">
+<h1><b>Contact AmitCoders</b></h1>
+<hr>
 <form method="post" action="/contact/">
 {% csrf_token %}
   <div class="form-group">
@@ -28,7 +31,13 @@
     <input type="checkbox" class="form-check-input" id="exampleCheck1">
     <label class="form-check-label" for="exampleCheck1">Check me out</label>
   </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="submit" class="btn btn-outline-primary">Submit</button>
 </form>
+</div>
+
+<div class="col-md-6">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQAyZQVEbAeJ7cteE0wwsDS7w93UJQqVJkCDA&usqp=CAU" class="h-100 w-100">
+</div>
+</div>
 </div>
 {% endblock body %}
